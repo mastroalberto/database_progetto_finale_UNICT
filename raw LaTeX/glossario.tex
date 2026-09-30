@@ -1,0 +1,54 @@
+\chapter{Glossario e schemi ER}
+
+\renewcommand{\arraystretch}{1.5}
+\begin{xltabular}{\textwidth}{|c|>{\centering\arraybackslash}X|c|>{\centering\arraybackslash}X|}
+    \caption{Glossario}
+    \label{tab:glossario} \\
+    \hline
+    \textbf{Termine} & \textbf{Descrizione} & \textbf{Sinonimo} & \textbf{Legame} \\
+    \hline
+    \endhead 
+    \textbf{Docente} & Professionista incaricato di svolgere le lezioni & Insegnante & Aula, Lezione \\
+    \hline
+    \textbf{Aula} & Luogo dove si svolgono le lezioni & Classe & Aula, Lezione \\
+    \hline
+    \textbf{Strumento} & Attrezzatura musicale che può essere fissa o mobile e noleggiata & - & Noleggio, Lezione \\
+    \hline
+    \textbf{Studente} & Persona che segue le lezioni del docente & Allievo & Noleggio, Lezione, Aula, Studente \\
+    \hline
+    \textbf{Lezione} & Ora di insegnamento dello strumento & Insegnamento & Aula, Lezione, Presenze, Pagamento \\
+    \hline
+    \textbf{Esame} & Esame di livello svolto dallo studente & Prova & Studente \\
+    \hline
+    \textbf{Noleggio} & Contratto di locazione di uno strumento a tempo & Affitto & Studente, Magazzino \\
+    \hline
+    \textbf{Prodotto} & Oggetto da acquistare & Oggetto, Accessorio & Magazzino \\ 
+    \hline
+    \textbf{Concerto} & Attività musicale e dimostrativa & Esibizione, Spettacolo & Studente, Docente \\
+    \hline
+    \textbf{Workshop} & Lezione frontale di gruppo con docenti esterni & Laboratorio, Seminario & Aula, Lezione \\
+    \hline
+\end{xltabular}
+\clearpage % Consigliato per dare allo schema una pagina tutta sua
+\begin{figure}[p]
+    \centering
+    % NOTA: angle=90 deve stare PRIMA di width e height!
+    \includegraphics[angle=0, width=\textwidth, height=0.9\textheight, keepaspectratio]{Schemi ER progetto-ER Scheletro.jpg}
+    \caption{Schema Entità-Relazione scheletro}
+    \label{fig:schema_er}
+\end{figure}
+\begin{figure}[p]
+    \centering
+    % NOTA: angle=90 deve stare PRIMA di width e height!
+    \includegraphics[angle=0, width=\textwidth, height=0.9\textheight, keepaspectratio]{Schemi ER progetto-ER Intermedio.jpg}
+    \caption{Schema Entità-Relazione intermedio}
+    \label{fig:schema_er}
+\end{figure}
+\clearpage
+\begin{figure}[p]
+    \centering
+    % NOTA: angle=90 deve stare PRIMA di width e height!
+    \includegraphics[angle=90, width=\textwidth, height=0.9\textheight, keepaspectratio]{Schemi ER progetto-ER Completo.jpg}
+    \caption{Schema Entità-Relazione completo}
+    \label{fig:schema_er}
+\end{figure}

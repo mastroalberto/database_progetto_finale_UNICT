@@ -1,0 +1,22 @@
+\chapter{Specifiche e vincoli}
+\paragraph{Specifiche sulle Operazioni} Di seguito un elenco di possibili operazioni che possono essere effettuate all'interno del database: 
+\begin{enumerate}
+    \item Registrazione nuovo Allievo nella scuola
+    \item Calcolo stipendi mensili docenti 
+    \item Registrazione di una nuova lezione
+    \item Acquisto di accessori 
+    \item Aggiornamento prodotti in magazzino 
+    \item Registrazione di nuovi workshop 
+    \item Prenotazione aule
+    \item Noleggio di strumenti forniti dalla scuola
+    \item Controllo pagamenti delle lezioni
+    \item Verifica di disponibilità di tutte le aule in una determinata fascia oraria
+\end{enumerate}
+\paragraph{Vincoli non esprimibili} Di seguito alcuni vincoli non esprimibili nello schema ER: 
+\begin{itemize}
+    \item Non è possibile registrare lo stesso studente due volte nella scuola
+    \item Non è possibile acquistare un prodotto in magazzino se la quantità selezionata è inferiore a quella in giacenza
+    \item Non è possibile prenotare un'aula se è già occupata per quella fascia oraria 
+    \item Non è possibile prenotare un'aula da parte di un docente che usufruisce di uno strumento fisso se l'aula non ne è dotata
+    \item Non è possibile noleggiare uno strumento già noleggiato
+\end{itemize}

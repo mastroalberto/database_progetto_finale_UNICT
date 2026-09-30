@@ -1,0 +1,102 @@
+\chapter{Progettazione fisica e indici}
+\paragraph{Scelta degli indici} Oltre all'implementazione di attributi ridondanti per la velocizzazione delle operazioni, si possono implementare anche indici secondari per alcune operazioni molto frequenti, vediamo dunque quali operazioni ho scelto per l'implementazione di un indice secondario: 
+\begin{itemize}
+    \item \textbf{OP10} Verifica disponibilità aula in  una determinata fascia oraria, coinvolge in \texttt{Lezione} e \texttt{Calendario\_Workshop}:
+    \begin{enumerate}
+        \item \texttt{Data}
+        \item \texttt{Fascia\_oraria}
+    \end{enumerate}
+    \item \textbf{OP9} Controllo pagamenti delle lezioni, coinvolge in \texttt{Pagamento}: 
+    \begin{enumerate}
+        \item \texttt{Data\_scadenza}
+        \item \texttt{Stato\_Pagamento}
+    \end{enumerate}
+    \item \textbf{OP2} Calcolo stipendi mensili docenti, coinvolge in \texttt{Lezione}: 
+    \begin{enumerate}
+        \item \texttt{Data}
+        \item \texttt{ID\_Docente}
+    \end{enumerate}
+\end{itemize}
+Di seguito i calcoli per gli indici: 
+\paragraph{OP10} Partendo dai dati: 
+\newline
+$N = 9246$
+\newline
+$B = 4096\ byte$
+\newline
+$R = 50\ byte$
+\newline
+$P = 4\ byte$
+\newline
+$V = 8\ byte$
+\newline
+\newline
+$bfr = \lfloor \frac{B}{R} \rfloor = \lfloor \frac{4096}{50} \rfloor = 81 \ blocchi$
+\newline
+$N_b = \lceil \frac{N}{bfr} \rceil = \lceil \frac{9246}{81} \rceil = 115\ blocchi$
+\newline
+$E_i = V + P = 8 + 4 = 12\ byte$
+\newline
+$bfr_i = \lfloor \frac{B}{E_i} \rfloor = \lfloor \frac{4096}{12} \rfloor = 341\ blocchi$
+\newline
+Calcolo indice denso: 
+$N_b = N = 9246$
+$b_{denso} = \lceil \frac{N}{bfr_i} \rceil = \lceil \frac{9246}{341} \rceil = 28$
+Costo di ricerca: 
+$\lceil \log_2{b_{denso}} \rceil + 1 = \lceil \log_2{28} \rceil + 1 = 5 + 1 = 6\ accessi$
+\paragraph{OP9} Partendo dai dati
+\newline
+$N = 2000$
+\newline
+$B = 4096\ byte$
+\newline
+$R = 50\ byte$
+\newline
+$P = 4\ byte$
+\newline
+$V = 26\ byte$
+\newline
+\newline
+$bfr = \lfloor \frac{B}{R} \rfloor = \lfloor \frac{4096}{50} \rfloor = 81 \ blocchi$
+\newline
+$N_b = \lceil \frac{N}{bfr} \rceil = \lceil \frac{2000}{81} \rceil = 25\ blocchi$
+\newline
+$E_i = V + P = 26 + 4 = 30\ byte$
+\newline
+$bfr_i = \lfloor \frac{B}{E_i} \rfloor = \lfloor \frac{4096}{30} \rfloor = 136\ blocchi$
+\newline
+Calcolo indice denso: 
+$N_b = N = 2000$
+$b_{denso} = \lceil \frac{N}{bfr_i} \rceil = \lceil \frac{2000}{136} \rceil = 15$
+Costo di ricerca: 
+$\lceil \log_2{b_{denso}} \rceil + 1 = \lceil \log_2{15} \rceil + 1 = 4 + 1 = 5\ accessi$
+\newpage
+\paragraph{OP2} Partendo dai dati: 
+\newline
+$N = 9246$
+\newline
+$B = 4096\ byte$
+\newline
+$R = 50\ byte$
+\newline
+$P = 4\ byte$
+\newline
+$V = 8\ byte$
+\newline
+\newline
+$bfr = \lfloor \frac{B}{R} \rfloor = \lfloor \frac{4096}{50} \rfloor = 81 \ blocchi$
+\newline
+$N_b = \lceil \frac{N}{bfr} \rceil = \lceil \frac{9246}{81} \rceil = 115\ blocchi$
+\newline
+$E_i = V + P = 8 + 4 = 12\ byte$
+\newline
+$bfr_i = \lfloor \frac{B}{E_i} \rfloor = \lfloor \frac{4096}{12} \rfloor = 341\ blocchi$
+\newline
+Calcolo indice denso: 
+$N_b = N = 9246$
+$b_{denso} = \lceil \frac{N}{bfr_i} \rceil = \lceil \frac{9246}{341} \rceil = 28$
+Costo di ricerca: 
+$\lceil \log_2{b_{denso}} \rceil + 1 = \lceil \log_2{28} \rceil + 1 = 5 + 1 = 6\ accessi$
+\newline
+\newline
+Notiamo come il risultato del terzo indice coincide con il primo

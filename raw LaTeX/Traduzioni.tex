@@ -1,0 +1,70 @@
+\chapter{Traduzioni schemi ER}
+\paragraph{Traduzioni uno a molti} Di seguito consideriamo tutte le relazioni uno a molti del database e le traduciamo in maniera discorsiva: 
+\begin{itemize}
+    \item La relazione \textbf{Occupa} tra le due entità \textbf{Aula} e \textbf{Lezione} viene inserita nell'entità Lezione attraverso la chiave esterna \texttt{ID\_Aula}
+    \item La relazione \textbf{Insegna} tra le due entità \textbf{Lezione} e \textbf{Docente} viene inserita all'interno dell'entità Lezione attraverso la chiave esterna \texttt{ID\_Docente} 
+    \item La relazione \textbf{Salda} tra le due entità \textbf{Pagamento} e \textbf{Studente} viene inserita all'interno dell'entità Pagamento attraverso la chiave esterna \texttt{Matricola}
+    \item La relazione \textbf{Appartiene} tra le due entità \textbf{Strumento} e \textbf{Categoria Strumento} viene inserita all'interno dell'entità Strumento attraverso la chiave esterna \texttt{Categoria\_Strumento}
+    \item La relazione \textbf{Riceve} tra le due entità \textbf{Stipendio} e \textbf{Docente} viene inserita all'interno dell'entità Stipendio attraverso la chiave esterna \texttt{ID\_Docente}
+\end{itemize}
+\newpage
+\paragraph{Traduzioni molti a molti} Di seguito le traduzioni delle relazioni molti a molti del database: 
+\begin{itemize}
+    \item La relazione \textbf{Noleggio} tra le due entità \textbf{Studente} e \textbf{Strumento} viene scorporata in una nuova entità con le chiavi esterne: 
+    \begin{enumerate}
+        \item \texttt{Matricola}
+        \item \texttt{ID\_Strumento}
+    \end{enumerate}
+    Inoltre aggiungiamo anche l'attributo \textbf{Quantità}
+    \item La relazione \textbf{Acquista} tra le due entità \textbf{Studente} e \textbf{Prodotto} viene scorporata in una nuova entità (Acquisto\_Prodotto) con le chiavi esterne: 
+    \begin{enumerate}
+        \item \texttt{Matricola}
+        \item \texttt{Cod\_Prodotto}
+    \end{enumerate}
+    Anche qui introduciamo nell'entità l'attributo \textbf{Quantità}
+    \item La relazione \textbf{Partecipa} tra le due entità \textbf{Studente} e \textbf{Lezione} viene scorporata in una nuova entità (Partecipazione\_Lezioni) con le chiavi esterne: 
+    \begin{enumerate}
+        \item \texttt{Matricola}
+        \item \texttt{ID\_Lezione}
+    \end{enumerate}
+    \item La relazione \textbf{Si svolge} tra le due entità \textbf{Aula} e \textbf{Workshop} viene scorporata in una nuova entità (Calendario\_Workshop) con le chiavi esterne: 
+    \begin{enumerate}
+        \item \texttt{ID\_Aula} 
+        \item \texttt{ID\_Workshop}
+    \end{enumerate}
+    A cui aggiungiamo inoltre l'attributo \textbf{data\_workshop}
+    \newpage
+    \item La relazione \textbf{Partecipa} tra le due entità \textbf{Workshop} e \textbf{Docente} viene scorporata in una nuova entità (Partecipazione\_Docenti\_WS) con le chiavi esterne: 
+    \begin{enumerate}
+        \item \texttt{ID\_Docente} 
+        \item \texttt{ID\_Workshop}
+    \end{enumerate}
+    \item La relazione \textbf{Specializzato} tra le due entità \textbf{Docente} e \textbf{Categoria Strumento} viene scorporata in una nuova entità (Specializzazione\_Docenti) con le chiavi esterne: 
+    \begin{enumerate}
+        \item \texttt{ID\_Docente}
+        \item \texttt{Categoria\_Strumento}
+    \end{enumerate}
+\end{itemize}
+\paragraph{Schema logico} Ne consegue infine lo schema logico:
+\begin{itemize}
+    \item Aula(\textbf{ID\_Aula}, Strumento\_Fisso, Numero\_Posti)
+    \item Lezione(\textbf{ID\_Lezione}, data, \textit{ID\_Aula}, \textit{ID\_Docente})
+    \item Docente(\textbf{ID\_Docente}, nome, cognome, specializzazione, compenso\_orario)
+    \item Studente(\textbf{matricola}, nome, cognome, codice\_fiscale, livello)
+    \item Pagamento(\textbf{ID\_Pagamento}, data, importo, \textit{matricola})
+    \item Strumento(\textbf{ID\_Strumento}, noleggiato, \textit{Categoria\_Strumento})
+    \item Categoria\_Strumento(\textbf{Categoria\_Strumento}) 
+    \item Stipendio(\textbf{Cod\_Pagamento}, data\_mensilità, importo, \textit{ID\_Docente}) 
+    \item Noleggio(\textbf{FK\_Matricola}, \textbf{FK\_ID\_Strumento})
+    \item Prodotto(\textbf{cod\_prodotto}, nome, categoria\_merceologica, \newline quantità)
+    \item Acquisto\_Prodotto(\textbf{FK\_Matricola}, \textbf{FK\_Cod\_Prodotto}) 
+    \item Partecipazione\_Lezioni(\textbf{FK\_Matricola}, \textbf{FK\_ID\_Lezione}) 
+    \newpage
+    \item Workshop(\textbf{ID\_workshop}, data\_workshop, numero\_partecipanti)
+    \item Calendario\_Workshop(\textbf{FK\_ID\_Aula}, \textbf{FK\_ID\_Workshop}, \newline data)
+    \item Partecipazione\_Docenti\_WS(\textbf{FK\_ID\_Docente}, \textbf{FK\_ID\_Workshop})
+    \item Specializzazione\_Docenti(\textbf{FK\_ID\_Docente}, \textbf{Fk\_ID\_Workshop})
+    \item Workshop(\textbf{ID\_Workshop}, data, numero\_partecipanti) 
+\end{itemize}
+\paragraph{Verifica BCNF} Il seguente schema logico rispetta per tutte le dipendenze funzionali la forma normale di Boyce-Codd, ad eccezione della entità \texttt{Workshop} la quale contiene l'attributo ridondante \texttt{Numero\_partecipanti} per velocizzare le operazioni nel database
+

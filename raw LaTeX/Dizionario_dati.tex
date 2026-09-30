@@ -1,0 +1,182 @@
+\chapter{Dizionari e tavole}
+\renewcommand{\arraystretch}{1.5}
+\begin{xltabular}{\textwidth}{|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}p{3.5cm}|}
+    \caption{Dizionario delle Entità}
+    \label{tab:dizionario} \\
+    \hline
+    \textbf{Entità} & \textbf{Descrizione} & \textbf{Attributi} & \textbf{Identificatore} \\
+    \hline
+    Pagamento & Pagamenti delle lezioni & ID\_pagamento, \newline Data\_Pagamento, Importo & \textbf{ID\_Pagamento} \\
+    \hline
+    Studente & Allievo della scuola di musica & Nome, Cognome, Codice\_fiscale, Livello & \textbf{Codice\_Fiscale} \\
+    \hline
+    Prodotto & Prodotto presente in magazzino & Quantità, \newline Categoria\_\allowbreak Merceologica, Cod\_Prodotto, Nome & \textbf{Cod\_Prodotto} \\
+    \hline
+    Strumento & Strumento musicale personale o della scuola & ID\_Strumento, Noleggiato & \textbf{ID\_Strumento} \\
+    \hline
+    Categoria\_\allowbreak Strumento & Categoria dello strumento (e.g a fiato, a corde etc.) & Categoria\_\allowbreak Strumento & \textbf{Categoria\_\allowbreak Strumento} \\
+    \hline
+    Docente & Insegnante che svolge lezioni di musica & ID\_Docente, Nome, Cognome, Specializzazione & \textbf{ID\_Docente} \\
+    \hline
+    Workshop & Lezione o lezioni di gruppo con ospiti & Data, ID\_Workshop & \textbf{ID\_Workshop} \\
+    \hline
+    Aula & Luogo dove si svolgono le lezioni & Strumento\_fisso, ID\_Aula, Numero\_Posti & \textbf{ID\_Aula} \\
+    \hline
+    Lezione & Attività didattica con Docente & Data, ID\_Lezione & \textbf{ID\_Lezione} \\
+    \hline
+    Stipendio & Importo mensile dei docenti & Importo, \newline Data\_Mensilità, Docente, Cod\_Pagamento & \textbf{Cod\_Pagamento} \\
+    \hline
+\end{xltabular}
+\newpage
+\renewcommand{\arraystretch}{1.5}
+\begin{xltabular}{\textwidth}{|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\caption{Dizionario delle Relazioni}
+    \label{tab:dizionario} \\
+    \hline
+    \textbf{Relazione} & \textbf{Partecipanti} & \textbf{Descrizione} \\
+    \hline
+    Salda & Studente, Pagamento & Lo studente salda il pagamento \\
+    \hline
+    Noleggio & Studente, Strumento & Associa gli strumenti noleggiati agli studenti \\
+    \hline
+    Acquista & Studente, Prodotto & Lo studente acquista un prodotto dal magazzino \\
+    \hline
+    Appartiene & Strumento, Categoria Strumento & Associa ad ogni strumento la sua categoria \\
+    \hline
+    Si suona & Strumento, Lezione & Uno strumento si suona a lezione \\
+    \hline
+    Occupa & Lezione, Aula & Associa ogni aula a una lezione
+    \hline
+    Si svolgono & Aula, Workshop & I workshop si svolgono in un'aula \\
+    \hline
+    Partecipa & Workshop, docente & Un docente partecipa al workshop \\
+    \hline
+    Partecipa & Studente, Lezione & Uno studente partecipa alla lezione \\ 
+    \hline
+    Insegna & Docente, Lezione & Un Docente svolge una lezione
+    \hline
+\end{xltabular}
+\newpage
+\renewcommand{\arraystretch}{1.5}
+\begin{xltabular}{\textwidth}{|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\caption{Tavola delle frequenze}
+    \label{tab:dizionario} \\
+    \hline
+    \textbf{Operazione} & \textbf{Descrizione} & \textbf{Frequenza} \\
+    \hline
+    OP1 & Registrazione allievo & 2 volte/mese \\
+    \hline
+    OP2 & Calcolo stipendi & 15 volte/mse \\ 
+    \hline
+    OP3 & Registrazione nuova lezione & 100 volte/mese \\ 
+    \hline
+    OP4 & Acquisto di accessori & 50 volte/mese \\ 
+    \hline
+    OP5 & Aggiornamento prodotti magazzino & 70 volte/mese \\ 
+    \hline
+    OP6 & Registrazione di nuovi workshop & 10 volte/mese \\ 
+    \hline
+    OP7 & Prenotazione aule & 100 volte/mese \\ 
+    \hline
+    OP8 & Noleggio strumenti & 10 volte/mese \\ 
+    \hline
+    OP9 & Controllo pagamenti lezioni & 300 volte/mese \\ 
+    \hline
+    OP10 & verifica disponibilità aula & 400 volte/mese \\ 
+    \hline
+\end{xltabular}
+\newpage
+\renewcommand{\arraystretch}{1.5}
+\begin{xltabular}{\textwidth}{|>{\raggedright\arraybackslash}p{4cm}|c|c|}
+\caption{Tavola dei volumi, stima dopo un anno}
+    \label{tab:dizionario} \\
+    \hline
+    \textbf{Concetto} & \textbf{Tipo} & \textbf{Volume} \\
+    \hline
+    Pagamento & E & 2000 \\
+    \hline
+    Studente & E & 200 \\
+    \hline
+    Prodotto & E & 20 \\ 
+    \hline
+    Strumento & E & 350 \\ 
+    \hline
+    Categoria Strumento & E & 5 \\ 
+    \hline
+    Docente & E & 20 \\ 
+    \hline
+    Workshop & E & 50 \\ 
+    \hline
+    Aula & E & 10 \\ 
+    \hline
+    Lezione & E & 9246 \\ % 200 studenti 1 lezione a settimana (46 settimane) e 1 lezione di gruppo da 8 persone
+    \hline
+    Stipendio & E & 220 \\ 
+    \hline
+    Salda & R & 1460 \\ 
+    \hline
+    Noleggio & R & 30 \\ 
+    \hline
+    Acquista(Studente, Prodotto) & R & 300 \\ 
+    \hline
+    Si suona & R & 9246 \\ 
+    \hline
+    Occupa \newline (Lezione, Aula) & R & 9246 \\ 
+    \hline
+    Partecipa \newline (Docente, Workshop) & R & 40 \\ 
+    \hline
+    Partecipa \newline (Studente, Lezione) & R & 9246 \\ 
+    \hline
+    Insegna \newline (Docente, Lezione) & R & 9286 \\ 
+    \hline
+\end{xltabular}
+\renewcommand{\arraystretch}{1.5}
+\begin{xltabular}{\textwidth}{|C|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{3cm}|}
+\caption{Tavola delle frequenze}
+ \label{tab:dizionario} \\
+    \hline
+    \textbf{Operazione} & \textbf{Descrizione} & \textbf{Frequenza} \\
+    \hline
+    OP1 & Registrazione Allievo & 5/mese \\
+    \hline
+    OP2 & Calcolo stipendi & 20/mese \\ 
+    \hline
+    OP3 & Registrazione nuova lezione & 600/mese \\ 
+    \hline
+    OP4 & Acquisto di accessori & 200/mese \\ 
+    \hline
+    OP5 & Aggiornamento prodotti magazzino & 100/mese \\ 
+    \hline
+    OP6 & Registrazione nuovi workshop & 10/mese \\ 
+    \hline
+    OP7 & Prenotazione aule & 600/mese \\
+    \hline
+    OP8 & Noleggio strumenti & 20/mese \\ 
+    \hline
+    OP9 & Controllo pagamenti & 1200/mese \\ 
+    \hline
+    OP10 & Verifica disponibilità & 1500/mese \\ 
+    \hline
+\end{xltabular}
+\clearpage
+\begin{figure}[p]
+    \centering
+    % NOTA: angle=90 deve stare PRIMA di width e height!
+    \includegraphics[angle=0, width=\textwidth, height=0.9\textheight, keepaspectratio]{Schemi ER progetto-Schema OP3.jpg}
+    \caption{Schema operazione OP3}
+    \label{fig:schema_er}
+\end{figure}
+\begin{figure}[p]
+    \centering
+    % NOTA: angle=90 deve stare PRIMA di width e height!
+    \includegraphics[angle=0, width=\textwidth, height=0.9\textheight, keepaspectratio]{Schemi ER progetto-Schema OP6.jpg}
+    \caption{Schema operazione OP6}
+    \label{fig:schema_er}
+\end{figure}
+\begin{figure}[p]
+    \centering
+    % NOTA: angle=90 deve stare PRIMA di width e height!
+    \includegraphics[angle=0, width=\textwidth, height=0.9\textheight, keepaspectratio]{Schemi ER progetto-Schema OP8.jpg}
+    \caption{Schema operazione OP8}
+    \label{fig:schema_er}
+\end{figure}

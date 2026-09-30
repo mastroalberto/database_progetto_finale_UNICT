@@ -1,0 +1,68 @@
+\chapter{Introduzione}
+\paragraph{Introduzione al progetto e analisi delle specifiche} Il progetto si prefigge l'obiettivo di costruire una base di dati per una scuola di musica gestendo molteplici scenari: 
+\begin{itemize}
+    \item Gestione dei corsi individuali e collettivi 
+    \item Gestione degli allievi
+    \begin{itemize}
+        \item Strumento suonato 
+        \item Livello di preparazione  
+        \item Docente assegnato
+        \item Orario della lezione
+    \end{itemize}
+    \item Tracciamento delle presenze degli allievi 
+    \item Esami di livello e saggi
+\end{itemize}
+Il database si dovrà inoltre occupare della gestione lato docente con: 
+\begin{itemize}
+    \item Specializzazioni docenti
+    \item Disponibilità 
+    \item Compensi
+\end{itemize}
+\newpage
+Infine la parte commerciale e amministrativa con: 
+\begin{itemize}
+    \item Noleggio strumenti musicali 
+    \item Vendita spariti ed accessori 
+    \item Aule con strumentazione 
+    \item Concerti degli allievi 
+    \item Workshop con artisti esterni
+\end{itemize}
+\paragraph{Studenti e certificazioni}
+Ogni studente può avere assegnato uno o più strumenti al momento dell'iscrizione nella scuola; di conseguenza, l'assegnazione a un docente per quello stesso strumento in base alla compatibilità degli orari. 
+\\
+Ogni lezione rappresenta uno slot di disponibilità per il docente, il tentativo di inserimento di una lezione all'interno di un slot già precedentemente occupato non è una operazione permessa all'interno del database. 
+\\ 
+Tutti gli studenti sono classificati in base al loro livello calcolato sulla base di esami conseguiti
+\\
+In base a ciò sarà possibile determinare quali esami possono effettuare gli studenti (e.g uno studente con livello 2 non può effettuare un esame di livello 4 senza prima aver ottenuto la certificazione per il livello 3) 
+\paragraph{Tracciamento pagamenti}
+La regolarità amministrativa viene tracciata attraverso il controllo dei regolari pagamenti delle lezioni attraverso una \texttt{VIEW} per visualizzare i pagamenti in ritardo
+\newpage
+\paragraph{Aule con strumentazione}
+Le aule destinate alle lezioni presentano dotazioni strumentali eterogenee. In fase di prenotazione da parte di un docente, il sistema dovrà gestire due aspetti fondamentali:
+\begin{itemize}
+    \item \textbf{Compatibilità strumentazione}
+    \begin{itemize}
+        \item È necessario che l'aula scelta possieda l'equipaggiamento necessario per lo svolgimento della lezione
+    \end{itemize}
+    \item \textbf{Esclusività della prenotazione} 
+    \begin{itemize}
+        \item È necessario un vincolo di integrità per impedire sovrapposizioni durante la prenotazione, evitando che la medesima aula venga prenotata contemporaneamente da più docenti.
+    \end{itemize}
+\end{itemize}
+\paragraph{Noleggio strumenti}
+Il noleggio strumenti richiede l'introduzione di rigorosi vincoli temporali e di disponibilità al fine di prevenire l'incongruenza dei dati quali: 
+\begin{itemize}
+    \item \textbf{Coerenza temporale} Un vincolo di dominio (implementabile attraverso la clausola \texttt{CHECK}) per far si che la data di fine noleggio non possa essere antecedente a quella di inizio
+    \item \textbf{Verifica della disponibilità} Un vincolo che impedisce il noleggio di uno strumento (identificato attraverso una chiave univoca) attualmente già prenotato (attraverso l'opportuno uso di \texttt{TRIGGER} al momento della prenotazione)
+\end{itemize}
+\paragraph{Vendita spariti e accessori}
+Per quanto concerne il modello relativo alla vendita di articoli e accessori (corde, plettri, cavi, etc.) i vincoli si basano sull'integrità della gestione del magazzino e della correttezza delle transazioni, in particolare: 
+\begin{itemize}
+    \item \textbf{Validità dei domini} al momento dell'acquisto di un oggetto è necessario verificare che l'oggetto acquistato sia in una quantità $> 0$ e l'importo della transazione un numero positivo
+    \item \textbf{Verifica delle giacenze} Le giacenze in magazzino devono essere gestite attraverso due vincoli fondamentali: 
+    \begin{itemize}
+        \item Al momento della vendita la quantità dell'oggetto acquistato deve essere pari o superiore a quella in giacenza all'interno del magazzino
+        \item Una volta evaso l'ordine è necessario un \texttt{TRIGGER} che si occupi di decrementare gli oggetti in giacenza in base alla quantità ordinata 
+    \end{itemize}
+\end{itemize}

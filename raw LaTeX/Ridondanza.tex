@@ -1,0 +1,27 @@
+\chapter{Valutazione costi e ridondanza}
+\paragraph{Attributo ridondante} consideriamo due operazioni sull'entità Workshop: 
+\begin{itemize}
+    \item \textbf{[OP-A]} Verifica posti disponibili (100 volte/mese)
+    \item \textbf{[OP-B]} Iscrizione studenti al workshop (40 volte/mese) 
+\end{itemize}
+Introduciamo dunque \texttt{Numero\_partecipanti} al fine di velocizzare le operazioni di lettura all'interno del database, calcoliamo se mantenere l'attributo ridondante sia conveniente o meno: 
+\paragraph{Con attributo ridondante} 
+\textbf{[OP-A]}: 100 letture al mese
+\newline
+\textbf{[OP-B]}: 40 letture al mese + 40 scritture sull'attributo ridondante
+\textbf{Totale}: $100 + 40 + (40 \times 2) = 260$ operazioni/mese 
+\footnote{Considerando ogni scrittura come equivalente a due letture in costo computazionale}
+\paragraph{Senza attributo ridondante} 
+\textbf{[OP-A]} Ipotizzando una media di 8 partecipanti per ogni workshop avremo: 
+\begin{enumerate}
+    \item 1 lettura su Workshop
+    \item 1 lettura su calendario\_workshop (nuova relazione necessaria)
+    \item 8 conteggi per i partecipanti 
+\end{enumerate}
+Dunque $10 \times 100 = 1000\ operazioni/mese$ 
+\newline
+\newline
+\textbf{{OP-B}} 40 scritture in Workshop $\longrightarrow 160\ operazioni/mese$
+\newline
+\textbf{Totale}: $1000 + (40 \times 2) = 1160$ operazioni/mese 
+\paragraph{Conclusione} Conviene mantenere l'attributo ridondante considerato il discreto risparmio in termini di costo mensile per le operazioni

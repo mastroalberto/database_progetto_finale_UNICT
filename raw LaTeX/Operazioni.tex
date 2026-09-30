@@ -1,0 +1,237 @@
+\chapter{Implementazione fisica delle operazioni}
+\paragraph{Implementazione delle operazioni} di seguito le 10 operazioni descritte prima in SQL: 
+\newline
+\newline
+\textbf{[OP1] registrazione nuovo allievo nella scuola}
+\begin{lstlisting}
+INSERT INTO Studente(matricola, nome, cognome, codice_fiscale, livello)
+VALUES (893092, 'Giovanni', 'Crescenzi', 'gvncrsn04p18c351k', 2); 
+\end{lstlisting}
+\newpage
+\textbf{[OP2] calcolo stipenndi mensili docenti}
+\begin{lstlisting}
+SELECT 
+    L.ID_Docente, 
+	D.nome, 
+	D.cognome, 
+	MONTH(L.data_lezione) AS mese, 
+	YEAR(L.data_lezione) AS Anno, 
+	COUNT(L.ID_Lezione) AS numero_lezioni, 
+	(COUNT(L.ID_Lezione) * D.compenso_orario) AS stipendio_mensile
+FROM Lezione L 
+JOIN Docente D ON L.ID_Docente = D.ID_Docente
+GROUP BY 
+	L.ID_Docente,
+	D.nome, 
+	D.cognome, 
+	YEAR(L.data_lezione), 
+	MONTH(L.data_lezione); 
+\end{lstlisting}
+\textbf{[OP3] registrazione di una nuova lezione}
+\begin{lstlisting}
+INSERT INTO Lezione(ID_Lezione, data_lezione, ID_Aula, ID_Docente, fascia_oraria) 
+VALUES (28939, '18-12-2025', 18, 4898, '18:00:00'); 
+\end{lstlisting}
+\textbf{[OP4] acquisto di accessori}
+\begin{lstlisting}
+INSERT INTO Acquisto_prodotto(FK_matricola, FK_cod_prodotto, quantità)
+VALUES (893092, 181911, 3); 
+\end{lstlisting}
+\newpage
+\textbf{[OP5] aggiornamento prodotti in magazzino}
+\begin{lstlisting}
+DELIMITER //
+CREATE TRIGGER aggiornamento_quantità_magazzino 
+AFTER INSERT ON Acquisto_prodotto 
+FOR EACH ROW 
+BEGIN 
+	UPDATE Prodotto 
+	SET quantità = quantità - NEW.quantità
+	WHERE cod_prodotto = NEW.FK_cod_prodotto; 
+END //
+\end{lstlisting}
+\textbf{[OP6] registrazione di nuovi workshop}
+\begin{lstlisting}
+INSERT INTO Workshop(ID_Workshop, data_workshop, numero_partecipanti) 
+VALUES (1928, '19-10-2026', 12); 
+\end{lstlisting}
+\textbf{[OP7] prenotazione aule}
+\begin{lstlisting}
+INSERT INTO Lezione(ID_Lezione, data_lezione, ID_Aula, ID_Docente, fascia_oraria) 
+VALUES (12493, '24-03-2026', 12, 4898, '15:00:00'); 
+-- o in alternativa per il workshop 
+INSERT INTO Calendario_Workshop(FK_ID_Aula, FK_ID_Workshop, data_workshop, fascia_oraria) 
+VALUES(14, 19109, '07-02-2026', '19:00:00'); 
+\end{lstlisting}
+\textbf{[OP8] noleggio strumenti forniti dalla scuola}
+\begin{lstlisting} 
+INSERT INTO Noleggio(FK_matricola, FK_ID_Strumento, data_inizio, data_fine) 
+VALUES (18930, 48930, '19-02-2026', '20-03-2027'); 
+\end{lstlisting}
+\newpage
+\textbf{[OP9] controllo pagamenti delle lezioni}
+\begin{lstlisting}
+CREATE VIEW lista_pagamenti_in_ritardo 
+SELECT S.nome, S.cognome, S.matricola, P.ID_pagamento, P.data_scadenza, P.stato_pagamento, P.importo
+FROM Studente S Join Pagamento P on S.matricola = P.matricola
+WHERE P.stato = 'non pagato' and P.data_scadenza < CURRENT_DATE(); 
+\end{lstlisting}
+\textbf{[OP10] verifica disponibilità di tutte le aule in una fascia oraria}
+\begin{lstlisting}
+DELIMITER //
+CREATE PROCEDURE verifica_disponibilta_aula (IN param_data, IN param_fascia_oraria) 
+BEGIN 
+	SELECT A.ID_Aula
+	FROM Aula A 
+	WHERE A.ID_Aula NOT IN ( 
+		SELECT ID_Aula 
+		FROM Lezione 
+		WHERE data_lezione = param_data AND fascia_oraria = param_fascia_oraria; 
+	) 
+	AND NOT IN ( 
+		SELECT ID_Aula
+		FROM Calendario_Workshop 
+		WHERE data_workshop = param_data AND fascia_oraria = param_fascia_oraria; 
+	) 
+END //
+
+CALL verifica_disponibiltà_aula('28-11-2026', '15:00:00'); 
+\end{lstlisting}
+\newpage
+\paragraph{Implementazione fisica dei trigger} di seguito l'implementazione fisica dei trigger in SQL: 
+\newline
+\newline
+\textbf{[T1] Non è possibile acquistare un prodotto in quantità superiore alla giacenza, con importo $<$ 0 \newline oppure quantità $<$ 0}
+\begin{lstlisting}
+DELIMITER //
+
+CREATE TRIGGER acquisto_fuori_giacenza 
+BEFORE INSERT ON Acquisto_Prodotto
+FOR EACH ROW
+ BEGIN
+	DECLARE giacenza_prodotto NUMBER; 
+	
+	SELECT quantità INTO giacenza_prodotto
+	FROM Prodotto P
+	WHERE P.cod_prodotto = NEW.FK_cod_prodotto;
+	
+	IF N.importo < 0 OR N.quantità < 0 OR N.quantità > giacenza_prodotto THEN 
+		SIGNAL SQLSTATE '45000'
+		SET MESSAGE_TEXT = 'impossibile concludere l''acquisto, il prodotto supera la giacenza in magazzino, l''importo è <0 oppure la quantita è <0'; 
+    END IF; 
+END //
+\end{lstlisting}
+\newpage
+\textbf{[T2] Non è possibile prenotare l'aula se è già occupata per quell'orario}
+\begin{lstlisting}
+CREATE TRIGGER prenotazione_aula_lezione 
+BEFORE INSERT ON Lezione
+FOR EACH ROW
+BEGIN
+	IF EXISTS ( 
+		SELECT 1 
+		FROM Lezione L 
+		WHERE L.ID_Aula = NEW.ID_Aula AND L.data_lezione = NEW.data_lezione AND L.fascia_oraria = NEW.fascia_oraria; 
+	) 
+	OR EXISTS ( 
+		SELECT 1
+		FROM Calendario_Workshop W 
+		WHERE W.FK_ID_aula = NEW.ID_Aula AND W.data_workshop = NEW.data_lezione AND W.fascia_oraria = NEW.fascia_oraria; 
+	) 
+	THEN 
+		SIGNAL SQLSTATE '45000' 
+		SET MESSAGE_TEXT = 'fascia oraria non disponibile per la prenotazione'; 
+	END IF; 
+END // 
+\end{lstlisting}
+\newpage
+\textbf{[T2.1] Idem al precedente per i workshop} 
+\begin{lstlisting}
+CREATE TRIGGER prenotazione_aula_workshop 
+BEFORE INSERT ON Calendario_Workshop
+FOR EACH ROW
+BEGIN
+	IF EXISTS ( 
+		SELECT 1 
+		FROM Lezione L 
+		WHERE L.ID_Aula = NEW.ID_Aula AND L.data_lezione = NEW.data_lezione AND L.fascia_oraria = NEW.fascia_oraria; 
+	) 
+	OR EXISTS ( 
+		SELECT 1
+		FROM Calendario_Workshop W 
+		WHERE W.FK_ID_aula = NEW.ID_Aula AND W.data_workshop = NEW.data_lezione AND W.fascia_oraria = NEW.fascia_oraria; 
+	) 
+	THEN 
+		SIGNAL SQLSTATE '45000' 
+		SET MESSAGE_TEXT = 'fascia oraria non disponibile per la prenotazione'; 
+	END IF; 
+END // 
+\end{lstlisting}
+\newpage
+\textbf{[T3] Non è possibile prenotare una lezione che richiede lo strumento fisso se l'aula ne è sprovvista}
+\begin{lstlisting}
+CREATE TRIGGER prenotazione_strumento_fisso 
+BEFORE INSERT ON Lezione
+FOR EACH ROW
+BEGIN
+	DECLARE dotazione_strumento_fisso BOOLEAN; 
+	DECLARE specializzazione_docente VARCHAR(60); 
+	
+	SELECT Strumento_fisso INTO dotazione_strumento_fisso
+	FROM Aula A 
+	WHERE N.ID_Aula = A.ID_Aula; 
+	
+	SELECT specializzazione INTO specializzazione_docente
+	FROM Docente D
+	WHERE NEW.ID_Docente = D.ID_Docente; 
+	
+	IF specializzazione_docente = 'batteria' OR specializzazione_docente = 'pianoforte' AND dotazione_strumento_fisso = FALSE THEN 
+		SIGNAL SQLSTATE '45000' 
+		SET MESSAGE_TEXT = 'Aula sprovvista di strumento fisso, impoossibile prenotare!' 
+	END IF; 
+END // 
+\end{lstlisting}
+\newpage
+\textbf{[T4] Non è possibile noleggiare uno strumento già noleggiato}
+\begin{lstlisting}
+CREATE TRIGGER noleggio_strumento 
+BEFORE INSERT ON Noleggio 
+FOR EACH ROW 
+BEGIN
+	DECLARE strumento_noleggiato BOOLEAN; 
+	
+	SELECT noleggiato INTO strumento_noleggiato 
+	FROM Strumento S
+	WHERE S.ID_Strumento = NEW.FK_ID_strumento; 
+	
+	IF strumento_noleggiato THEN 
+		SIGNAL SQLSTATE '45000' 
+		SET MESSAGE_TEXT = 'Lo strumento scelto è già stato noleggiato!' 
+	END IF; 
+END //
+\end{lstlisting}
+\textbf{[T5] non è possibile saltare un livello per lo studente}
+\begin{lstlisting}
+CREATE TRIGGER avanzamento_livello_studente 
+BEFORE UPDATE ON INSERT
+FOR EACH ROW
+BEGIN
+	IF NEW.livello > OLD.livello + 1 THEN
+		SIGNAL SQLSTATE '45000' 
+		SET MESSAGE_TEXT = 'Non è possibile saltare un livello per lo Studente' 
+	END IF; 
+END //
+\end{lstlisting}
+\newpage
+\paragraph{Conclusioni e uso strumenti} Il seguente progetto è stato creato attraverso gli strumenti: 
+\begin{itemize}
+    \item Overleaf per la scrittura della relazione in pdf
+    \item Notepad++ per la scrittura del codice SQL
+    \item Gemini 3.1 Pro per alcune specifici prompt legati alle seguenti attività: 
+    \begin{enumerate}
+        \item Aiuto con la formattazione del codice \LaTeX \ per le tabelle del glossario e dizionario dati
+        \item Creazione del dump del database
+    \end{enumerate}
+\end{itemize}
+Il codice SQL (ad eccezione del dump) \textbf{NON} è stato generato dall'intelligenza artificiale
+

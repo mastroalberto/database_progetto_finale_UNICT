@@ -1,0 +1,80 @@
+\documentclass{scrbook}
+
+% impostazioni lingua
+\usepackage[italian]{babel}
+
+% layout pagina
+\KOMAoptions{paper=a4, fontsize=14pt, chapterprefix=true, twoside=
+semi, DIV=classic, parskip=half, twoside=false}
+
+% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{listings}
+\usepackage{tabularx}
+\usepackage{makecell}
+\usepackage{float}
+\usepackage{xltabular}
+\usepackage{xcolor}
+
+% Tavolozza Solarized Light
+\definecolor{bashbase}{RGB}{101,123,131}   % testo base (grigio-blu)
+\definecolor{bashblue}{RGB}{38,139,210}    % keyword (blu intenso)
+\definecolor{bashgreen}{RGB}{133,153,0}    % commenti (verde oliva)
+\definecolor{bashcyan}{RGB}{42,161,152}    % variabili, parametri
+\definecolor{bashorange}{RGB}{203,75,22}   % stringhe
+\definecolor{bashred}{RGB}{220,50,47}      % errori o warning
+\definecolor{bashbg}{RGB}{253,246,227}     % sfondo chiaro
+
+\lstset{
+  frame=single,
+  language=SQL,
+  backgroundcolor=\color{bashbg},
+  basicstyle=\small\ttfamily\color{bashbase},
+  showstringspaces=false,
+  columns=flexible,
+  numbers=none,
+  numberstyle=\tiny\color{bashbase},
+  keywordstyle=\color{bashblue}\bfseries,
+  commentstyle=\color{bashgreen}\itshape,
+  stringstyle=\color{bashorange},
+  morekeywords={sudo,apt,pacman,dnf,echo,cat,grep,awk,sed}, % comandi comuni
+  emph={ls,cd,mkdir,rm,cp,mv}, emphstyle=\color{bashcyan},
+  breaklines=true,
+  breakatwhitespace=true,
+  aboveskip=3mm,
+  belowskip=3mm,
+  tabsize=3
+  literate={à}{{\`a}}1 {è}{{\`e}}1 {é}{{\'e}}1 {ì}{{\`i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1
+}
+
+\title{Relazione Basi di dati \\
+\large Base di dati scuola di musica \\
+relazione tecnica}
+\author{Alberto Bella \\ 
+Matricola: 1000071543}
+
+
+% inizio documento
+\begin{document}
+\maketitle
+
+% generazione indice
+\tableofcontents
+
+% colori
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+% capitoli
+\include{introduzione}
+\include{glossario}
+\include{Specifiche_vincoli}
+\include{Dizionario_dati}
+\include{Ridondanza}
+\include{Traduzioni}
+\include{Progettazione_fisica}
+\include{Operazioni}
+\end{document}
